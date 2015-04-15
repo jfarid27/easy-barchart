@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo</title>
+</head>
+
+<body>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+        var module = {}
+        var require = function(){ return d3 }
+    </script>
+    <script src="easy-barchart.js"></script>
+    <script>
+
+        parsedData = {
+            'points': d3.range(20).map(function(index){
+                return {
+                    'x': index,
+                    'y': (10 * index) + Math.random() * 20,
+                }
+            })
+        }
+
+        var plot = module.exports(d3)
+            .selection(d3.select('body'))
+
+        plot()
+
+        var events = plot.dispatch()
+
+        events.draw({
+            data: parsedData,
+            labels: d3.range(20),
+            y: { min: 0, max: 220 } 
+        })
+
+        setTimeout(function(){
+
+            parsedData.points.map(function(point){
+                point.y = point.y /2
+            })
+
+            parsedData.points = parsedData.points.concat([
+                {
+                    'x': 20,
+                    'y': (10) + Math.random() * 20,
+                }, 
+                {
+                    'x': 21,
+                    'y': (10) + Math.random() * 20,
+                }, 
+
+            ])
+
+            events.update({
+                data: parsedData,
+                labels: d3.range(22),
+                y: { min: 0, max: 220 } 
+            })
+
+        }, 4000)
+
+    </script>
+</body>
+</html>
