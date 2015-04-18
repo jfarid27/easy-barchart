@@ -8,10 +8,31 @@
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script>
         var module = {}
-        var require = function(){ return d3 }
     </script>
     <script src="easy-barchart.js"></script>
     <script>
+
+        var settings = {
+            'x':{
+                'margin':60,
+                'gutter':60,
+                'axisWidth':600,
+                'paddingPercentage':.05,
+            },
+            'y':{
+                'margin':20,
+                'gutter':30,
+                'axisWidth':600,
+            },
+            'styles':{
+                'brush': {
+                'color': '#903b20'
+                },
+                'bars':{
+                'color': 'blue'
+                }
+            }
+        }
 
         parsedData = {
             'points': d3.range(20).map(function(index){
@@ -22,8 +43,18 @@
             })
         }
 
+        var selection = d3.select('body').append('svg')
+            .attr('width', settings.x.margin + 
+                settings.x.gutter +
+                settings.x['axisWidth'])
+            .attr('height', settings.y.margin + 
+                settings.y.gutter +
+                settings.y['axisWidth'])
+
         var plot = module.exports(d3)
-            .selection(d3.select('body'))
+
+        plot.selection(selection)
+        .settings(settings)
 
         plot()
 

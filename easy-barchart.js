@@ -1,8 +1,6 @@
-var d3 = require('d3')
+var barchart = function(d3){
 
-var barchart = function(){
-
-    var selection, svg, shownPoints
+    var selection, shownPoints
 
     var settings = {
         'x':{
@@ -62,13 +60,8 @@ var barchart = function(){
             .range([settings.y.margin + 
                 settings.y['axisWidth'], settings.y.margin ])
 
-        svg = selection.append('svg')
-            .attr('width', settings.x.margin + 
-                settings.x.gutter +
-                settings.x['axisWidth'])
-            .attr('height', settings.y.margin + 
-                settings.y.gutter +
-                settings.y['axisWidth'])
+        svg = selection.append('g')
+            .classed('easy-barchart', true)
 
         brush.group = svg.append('g')
             .classed('histogramplot-brush', true)
