@@ -12,85 +12,74 @@
     <script src="easy-barchart.js"></script>
     <script>
 
-        var settings = {
-            'x':{
-                'margin':60,
-                'gutter':60,
-                'axisWidth':600,
-                'paddingPercentage':.05,
-            },
-            'y':{
-                'margin':20,
-                'gutter':30,
-                'axisWidth':600,
-            },
-            'styles':{
-                'brush': {
-                'color': '#903b20'
+        var parsedData
+        d3.json('sample_data.json', function(data){
+            histData = d3.layout.histogram()(data.values[5])
+            var parsedData = {'points': histData }
+            var settings = {
+                'x':{
+                    'margin':60,
+                    'gutter':60,
+                    'axisWidth':600,
+                    'paddingPercentage':.05,
                 },
-                'bars':{
-                'color': 'blue'
+                'y':{
+                    'margin':20,
+                    'gutter':30,
+                    'axisWidth':600,
+                },
+                'styles':{
+                    'brush': {
+                    'color': '#903b20'
+                    },
+                    'bars':{
+                    'color': 'blue'
+                    }
                 }
             }
-        }
 
-        parsedData = {
-            'points': d3.range(20).map(function(index){
-                return {
-                    'x': index,
-                    'y': (10 * index) + Math.random() * 20,
-                }
+            var selection = d3.select('body').append('svg')
+                .attr('width', settings.x.margin + 
+                    settings.x.gutter +
+                    settings.x['axisWidth'])
+                .attr('height', settings.y.margin + 
+                    settings.y.gutter +
+                    settings.y['axisWidth'])
+
+            var plot = module.exports(d3)
+
+            plot.selection(selection)
+            .settings(settings)
+
+            plot()
+
+            var events = plot.dispatch()
+            events.draw({
+                data: parsedData,
+                labels: parsedData.points.map(function(p){ return p.x }),
+                y: { min: 0 , max: 50 } 
             })
-        }
 
-        var selection = d3.select('body').append('svg')
-            .attr('width', settings.x.margin + 
-                settings.x.gutter +
-                settings.x['axisWidth'])
-            .attr('height', settings.y.margin + 
-                settings.y.gutter +
-                settings.y['axisWidth'])
+            setTimeout(function(){
 
-        var plot = module.exports(d3)
+                parsedData.points = parsedData.points.map(function(d){
+                    d.y = d.y + 10 * Math.random()
+                    return d
+                })
+                events.draw({
+                    data: parsedData,
+                    labels: parsedData.points.map(function(p){ return p.x }),
+                    y: { 
+                        min: 0 , 
+                        max: d3.max(parsedData.points, function(d){
+                            return d.y
+                        }) 
+                    } 
+                })
 
-        plot.selection(selection)
-        .settings(settings)
-
-        plot()
-
-        var events = plot.dispatch()
-
-        events.draw({
-            data: parsedData,
-            labels: d3.range(20),
-            y: { min: 0, max: 220 } 
+            }, 4000)
         })
 
-        setTimeout(function(){
-
-            parsedData.points.map(function(point){
-                point.y = point.y /2
-            })
-
-            parsedData.points = parsedData.points.concat([
-                {
-                    'x': 20,
-                    'y': (10) + Math.random() * 20,
-                }, 
-                {
-                    'x': 21,
-                    'y': (10) + Math.random() * 20,
-                }, 
-
-            ])
-
-            events.update({
-                data: parsedData,
-                labels: d3.range(22),
-                y: { min: 0, max: 220 } 
-            })
-
-        }, 4000)
 
     </script>
 </body>

@@ -43,7 +43,8 @@ var barchart = function(d3){
 
     var brush = {
         'instance': d3.svg.brush(),
-        'group': undefined
+        'group': undefined,
+        'selection': false
     }
 
     var dispatch = d3.dispatch('brushend', 'update', 'draw')
@@ -255,6 +256,21 @@ var barchart = function(d3){
         return selection
     }
 
+    exports.brush = function(){
+        if (arguments.length > 0){
+            brush = arguments[0]
+            return exports
+        }
+        return brush
+    }
+    exports.brush.selection = function(){
+        if (arguments.length > 0){
+            brush.selection = arguments[0]
+            return exports
+        }
+        return brush.selection
+    }
+
     exports.dispatch = function(){
 
         if (arguments.length > 0){
@@ -275,9 +291,11 @@ var barchart = function(d3){
     }
 
     function updateBrush(){
+        if (brush.selection){    
         brush.instance.x(axis.x.scale)
         brush.instance.y(axis.y.scale)
         brush.group.call(brush.instance) 
+        }
     }
 
     return exports
