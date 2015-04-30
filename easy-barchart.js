@@ -1,6 +1,6 @@
 var barchart = function(d3){
 
-    var selection, shownPoints
+    var selection, shownPoints, svg
 
     var settings = {
         'x':{
