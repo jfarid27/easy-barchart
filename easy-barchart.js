@@ -30,7 +30,7 @@ var barchart = function(d3){
 
     var axis = {
         'x':{
-            'scale': d3.scale.ordinal(),
+            'scale': d3.scale.linear(),
             'group': undefined, 
             'svg': d3.svg.axis()
             },
@@ -52,10 +52,10 @@ var barchart = function(d3){
     var exports = function(){
 
         axis.x.scale
-            .rangeRoundBands([settings.x.margin +
+            .range([settings.x.margin +
                 settings.x['gutter'],
                     settings.x.margin + settings.x['axisWidth'] + 
-                settings.x.gutter], settings.x.paddingPercentage)
+                settings.x.gutter])
 
         axis.y.scale
             .range([settings.y.margin + 
@@ -93,8 +93,11 @@ var barchart = function(d3){
             updateScales(reqs)
             updateBrush()
 
-            axis.x.svg.scale(axis.x.scale).orient('bottom')
-            axis.y.svg.scale(axis.y.scale).orient('left')
+            axis.x.svg
+                .orient('bottom')
+
+            axis.y.svg
+                .orient('left')
 
             axis.x.group
                 .attr("transform", "translate(0," 
@@ -121,7 +124,8 @@ var barchart = function(d3){
                     return axis.x.scale(point.x)
                 })
                 .attr("width", function(point){
-                    return axis.x.scale.rangeBand()
+                    return axis.x.scale(point.dx + point.x) -
+                        axis.x.scale(point.x)
                 })
                 .attr("y", function(point){
                     return axis.y.scale.range()[0] 
@@ -136,6 +140,9 @@ var barchart = function(d3){
                 .attr("y", function(point){
                     return axis.y.scale(point.y)
                 })
+                .attr("x", function(point){
+                    return axis.x.scale(point.x)
+                })
                 .attr("height", function(point){
                     return axis.y.scale.range()[0] 
                         - axis.y.scale(point.y)
@@ -148,8 +155,11 @@ var barchart = function(d3){
             updateScales(reqs)
             updateBrush()
 
-            axis.x.svg.scale(axis.x.scale).orient('bottom')
-            axis.y.svg.scale(axis.y.scale).orient('left')
+            axis.x.svg
+                .orient('bottom')
+
+            axis.y.svg
+                .orient('left')
 
             axis.x.group
                 .attr("transform", "translate(0," 
@@ -176,7 +186,8 @@ var barchart = function(d3){
                     return axis.x.scale(point.x)
                 })
                 .attr("width", function(point){
-                    return axis.x.scale.rangeBand()
+                    return axis.x.scale(point.dx + point.x) -
+                        axis.x.scale(point.x)
                 })
                 .attr("y", function(point){
                     return axis.y.scale.range()[0] 
@@ -196,7 +207,8 @@ var barchart = function(d3){
                     return axis.y.scale(point.y)
                 })
                 .attr("width", function(point){
-                    return axis.x.scale.rangeBand()
+                    return axis.x.scale(point.dx + point.x) -
+                        axis.x.scale(point.x)
                 })
                 .attr("height", function(point){
                     return axis.y.scale.range()[0] 
@@ -284,7 +296,8 @@ var barchart = function(d3){
     function updateScales(data){
 
         axis.x.scale
-            .domain(data.labels)
+            .domain([data.x.min, data.x.max])
+
         axis.y.scale.domain([data.y.min, data.y.max]) 
         axis.x.svg.scale(axis.x.scale)
         axis.y.svg.scale(axis.y.scale)
@@ -292,9 +305,9 @@ var barchart = function(d3){
 
     function updateBrush(){
         if (brush.selection){    
-        brush.instance.x(axis.x.scale)
-        brush.instance.y(axis.y.scale)
-        brush.group.call(brush.instance) 
+            brush.instance.x(axis.x.scale)
+            brush.instance.y(axis.y.scale)
+            brush.group.call(brush.instance) 
         }
     }
 

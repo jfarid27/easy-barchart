@@ -12,10 +12,13 @@
     <script src="easy-barchart.js"></script>
     <script>
 
-        var parsedData
         d3.json('sample_data.json', function(data){
-            histData = d3.layout.histogram()(data.values[5])
+
+            var histData = d3.layout
+                .histogram()(data.values[5])
+
             var parsedData = {'points': histData }
+
             var settings = {
                 'x':{
                     'margin':60,
@@ -49,14 +52,14 @@
             var plot = module.exports(d3)
 
             plot.selection(selection)
-            .settings(settings)
+                .settings(settings)
 
             plot()
 
             var events = plot.dispatch()
             events.draw({
                 data: parsedData,
-                labels: parsedData.points.map(function(p){ return p.x }),
+                x: { min: -1, max: 5}, 
                 y: { min: 0 , max: 50 } 
             })
 
@@ -66,9 +69,10 @@
                     d.y = d.y + 10 * Math.random()
                     return d
                 })
+                console.log(parsedData)
                 events.draw({
                     data: parsedData,
-                    labels: parsedData.points.map(function(p){ return p.x }),
+                    x: { min: 0, max: 5}, 
                     y: { 
                         min: 0 , 
                         max: d3.max(parsedData.points, function(d){
