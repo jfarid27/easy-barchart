@@ -19,13 +19,23 @@ var barchart = function(d3){
                 'color': '#903b20'
             },
             'bars':{
-                'color': 'blue'
+                'color': 'blue',
+                'padding-percentage': .05 
+            },
+            'lines':{
+                'vertical': {
+                    'stroke-dasharray': '3,3',
+                    'stroke-width': '1.5px',
+                    'fill': '#fff',
+                    'stroke': '#000'
+                }
             }
         }
     }
 
     var plot = {
-        'group':undefined
+        'group':undefined,
+        'mean': undefined
     }
 
     var axis = {
@@ -75,6 +85,9 @@ var barchart = function(d3){
 
         plot.group = svg.append('g')
             .classed('histogramplot-plot', true)
+
+        plot.line = svg.append('g')
+            .classed('histogramplot-line', true)
 
         brush.instance.on('brush', function(){
             brush.group.selectAll('rect')
@@ -148,6 +161,32 @@ var barchart = function(d3){
                         - axis.y.scale(point.y)
                 })
                 .style("fill", settings.styles.bars.color)
+
+            var lines = plot.line.selectAll('line')
+                .data(reqs.data.lines.verticals, function(line){ return line.value })
+
+            lines.enter()
+                .append('line')
+                    .attr('class', 'histogramplot-line')
+                    .attr('x2', function(line){
+                        return axis.x.scale(line.value)
+                    })
+                    .attr('x1', function(line){ 
+                        return axis.x.scale(line.value)
+                    })
+                    .attr('y2', function(line){
+                        return axis.y.scale(reqs.y.min)
+                    })
+                    .attr('y1', function(line){ 
+                        return axis.y.scale(reqs.y.min)
+                    })
+                    .style(settings.styles.lines.vertical)
+
+            lines
+                .transition().duration(2000)
+                    .attr('y2', function(line){
+                        return axis.y.scale(reqs.y.max)
+                    })
         })
 
         dispatch.on('update', function(reqs){
@@ -222,6 +261,40 @@ var barchart = function(d3){
                     return 0
                 })
             .remove()
+
+            var lines = plot.line.selectAll('line')
+                .data(reqs.data.lines.verticals, function(line){ return line.value })
+
+            lines.enter()
+                .append('line')
+                    .attr('class', 'histogramplot-line')
+                    .attr('x2', function(line){
+                        return axis.x.scale(line.value)
+                    })
+                    .attr('x1', function(line){ 
+                        return axis.x.scale(line.value)
+                    })
+                    .attr('y2', function(line){
+                        return axis.y.scale(reqs.y.min)
+                    })
+                    .attr('y1', function(line){ 
+                        return axis.y.scale(reqs.y.min)
+                    })
+                    .style(settings.styles.lines.vertical)
+
+            lines
+                 .transition().duration(2000)
+                    .attr('class', 'histogramplot-line')
+                    .attr('y2', function(line){
+                        return axis.y.scale(reqs.y.max)
+                    })
+
+            lines.exit()
+                .transition().duration(2000)
+                    .attr('y2', function(line){
+                        return axis.y.scale(reqs.y.min)
+                    })
+                .remove()
 
         })
 
