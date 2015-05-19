@@ -7,7 +7,6 @@ var barchart = function(d3){
             'margin':60,
             'gutter':60,
             'axisWidth':600,
-            'paddingPercentage':.05,
         },
         'y':{
             'margin':20,
@@ -55,6 +54,16 @@ var barchart = function(d3){
         'instance': d3.svg.brush(),
         'group': undefined,
         'selection': false
+    }
+
+    var barWidth = function(point, paddingPerc){
+        var full = axis.x
+            .scale(point.dx + point.x) -
+                axis.x.scale(point.x)
+
+        var offset = full * paddingPerc
+
+        return full - offset
     }
 
     var dispatch = d3.dispatch('brushend', 'update', 'draw')
@@ -137,8 +146,10 @@ var barchart = function(d3){
                     return axis.x.scale(point.x)
                 })
                 .attr("width", function(point){
-                    return axis.x.scale(point.dx + point.x) -
-                        axis.x.scale(point.x)
+
+                    return barWidth(point, 
+                        settings.styles.bars['padding-percentage'])
+
                 })
                 .attr("y", function(point){
                     return axis.y.scale.range()[0] 
@@ -225,8 +236,8 @@ var barchart = function(d3){
                     return axis.x.scale(point.x)
                 })
                 .attr("width", function(point){
-                    return axis.x.scale(point.dx + point.x) -
-                        axis.x.scale(point.x)
+                    return barWidth(point, 
+                        settings.styles.bars['padding-percentage'])
                 })
                 .attr("y", function(point){
                     return axis.y.scale.range()[0] 
@@ -246,8 +257,8 @@ var barchart = function(d3){
                     return axis.y.scale(point.y)
                 })
                 .attr("width", function(point){
-                    return axis.x.scale(point.dx + point.x) -
-                        axis.x.scale(point.x)
+                    return barWidth(point, 
+                        settings.styles.bars['padding-percentage'])
                 })
                 .attr("height", function(point){
                     return axis.y.scale.range()[0] 
