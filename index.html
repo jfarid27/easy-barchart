@@ -64,6 +64,9 @@
 
             plot.selection(selection)
                 .settings(settings)
+                .axis.x.labels.transformer(function(l){
+                    return l * 100 + '%'
+                })
 
             plot()
 

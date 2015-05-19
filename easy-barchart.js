@@ -41,12 +41,18 @@ var barchart = function(d3){
         'x':{
             'scale': d3.scale.linear(),
             'group': undefined, 
-            'svg': d3.svg.axis()
-            },
+            'svg': d3.svg.axis(),
+            'labels': {
+                'transformer': function(i){ return i }
+            }
+        },
         'y':{
             'scale': d3.scale.linear(),
             'group': undefined,
-            'svg': d3.svg.axis()
+            'svg': d3.svg.axis(),
+            'labels': {
+                'transformer': function(i){ return i }
+            }
         }
     }
 
@@ -79,6 +85,9 @@ var barchart = function(d3){
         axis.y.scale
             .range([settings.y.margin + 
                 settings.y['axisWidth'], settings.y.margin ])
+
+        axis.x.svg.tickFormat(axis.x.labels.transformer)
+        axis.y.svg.tickFormat(axis.y.labels.transformer)
 
         svg = selection.append('g')
             .classed('easy-barchart', true)
@@ -365,6 +374,38 @@ var barchart = function(d3){
             return exports
         }
         return brush.selection
+    }
+
+    exports.axis = function(){ 
+        if (arguments.length > 0){
+            axis = arguments[0]
+            return exports
+        }
+        return axis 
+    }
+
+    exports.axis.x = function(){ 
+        if (arguments.length > 0){
+            axis.x = arguments[0]
+            return exports
+        }
+        return axis.x 
+    }
+
+    exports.axis.x.labels = function(){ 
+        if (arguments.length > 0){
+            axis.x.labels = arguments[0]
+            return exports
+        }
+        return axis.x.labels
+    }
+
+    exports.axis.x.labels.transformer = function(){ 
+        if (arguments.length > 0){
+            axis.x.labels.transformer = arguments[0]
+            return exports
+        }
+        return axis.x.labels.transformer
     }
 
     exports.dispatch = function(){
