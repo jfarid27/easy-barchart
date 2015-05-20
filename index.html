@@ -17,14 +17,16 @@
             var histData = d3.layout
                 .histogram()(data.values[5])
 
-            var parsedData = {'points': histData }
+            var parsedData = {
+                'points': histData,
+                'lines':{'verticals':[{'value': 1}]}
+            }
 
             var settings = {
                 'x':{
                     'margin':60,
                     'gutter':60,
                     'axisWidth':600,
-                    'paddingPercentage':.05,
                 },
                 'y':{
                     'margin':20,
@@ -33,10 +35,19 @@
                 },
                 'styles':{
                     'brush': {
-                    'color': '#903b20'
+                        'color': '#903b20'
                     },
                     'bars':{
-                    'color': 'blue'
+                        'color': 'blue',
+                        'padding-percentage': .05 
+                    },
+                    'lines':{
+                        'vertical': {
+                            'stroke-dasharray': '3,3',
+                            'stroke-width': '1.5px',
+                            'fill': '#fff',
+                            'stroke': '#000'
+                        }
                     }
                 }
             }
@@ -53,6 +64,9 @@
 
             plot.selection(selection)
                 .settings(settings)
+                .axis.x.labels.transformer(function(l){
+                    return l * 100 + '%'
+                })
 
             plot()
 
@@ -69,8 +83,10 @@
                     d.y = d.y + 10 * Math.random()
                     return d
                 })
-                console.log(parsedData)
-                events.draw({
+
+                parsedData.lines = {'verticals':[{'value': 2}]}
+
+                events.update({
                     data: parsedData,
                     x: { min: 0, max: 5}, 
                     y: { 
