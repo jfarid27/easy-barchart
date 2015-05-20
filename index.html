@@ -64,16 +64,14 @@
 
             plot.selection(selection)
                 .settings(settings)
-                .axis.x.labels.transformer(function(l){
-                    return l * 100 + '%'
-                })
+                .axis.x.labels.transformer(d3.format('-%'))
 
             plot()
 
             var events = plot.dispatch()
             events.draw({
                 data: parsedData,
-                x: { min: -1, max: 5}, 
+                x: { min: -1, max: 1}, 
                 y: { min: 0 , max: 50 } 
             })
 

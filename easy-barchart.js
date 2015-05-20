@@ -86,8 +86,6 @@ var barchart = function(d3){
             .range([settings.y.margin + 
                 settings.y['axisWidth'], settings.y.margin ])
 
-        axis.x.svg.tickFormat(axis.x.labels.transformer)
-        axis.y.svg.tickFormat(axis.y.labels.transformer)
 
         svg = selection.append('g')
             .classed('easy-barchart', true)
@@ -424,8 +422,15 @@ var barchart = function(d3){
             .domain([data.x.min, data.x.max])
 
         axis.y.scale.domain([data.y.min, data.y.max]) 
-        axis.x.svg.scale(axis.x.scale)
-        axis.y.svg.scale(axis.y.scale)
+
+        axis.x.svg
+            .tickValues(data.data.points.map(function(d){ return d.x }))
+            .tickFormat(axis.x.labels.transformer)
+            .scale(axis.x.scale)
+
+        axis.y.svg
+        .tickFormat(axis.y.labels.transformer)
+        .scale(axis.y.scale)
     }
 
     function updateBrush(){
