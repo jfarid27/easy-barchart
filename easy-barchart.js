@@ -416,10 +416,11 @@ var barchart = function(d3){
 
     }
 
-    function lastElementOffset(data){
+    function lastElementOffset(reqs){
         var offset = 0
-        if(data.points && data.points.length > 0){
-            offset = data.points[0].dx
+        if(reqs.data.points && reqs.data.points.length > 0){
+            offset = reqs.data.points[0].dx * 
+                (1 + settings.styles.bars['padding-percentage'])
         }
 
         return offset
@@ -428,9 +429,9 @@ var barchart = function(d3){
     function updateScales(data){
 
         axis.x.scale
-            .domain([data.x.min, data.x.max])
+            .domain([data.x.min, data.x.max + lastElementOffset(data)])
 
-        axis.y.scale.domain([data.y.min, data.y.max + lastElementOffset(data)]) 
+        axis.y.scale.domain([data.y.min, data.y.max]) 
 
         axis.x.svg
             .tickValues(data.data.points.map(function(d){ return d.x }))
