@@ -416,12 +416,21 @@ var barchart = function(d3){
 
     }
 
+    function lastElementOffset(data){
+        var offset = 0
+        if(data.points && data.points.length > 0){
+            offset = data.points[0].dx
+        }
+
+        return offset
+    }
+
     function updateScales(data){
 
         axis.x.scale
             .domain([data.x.min, data.x.max])
 
-        axis.y.scale.domain([data.y.min, data.y.max]) 
+        axis.y.scale.domain([data.y.min, data.y.max + lastElementOffset(data)]) 
 
         axis.x.svg
             .tickValues(data.data.points.map(function(d){ return d.x }))
