@@ -42,6 +42,7 @@ var barchart = function(d3){
             'scale': d3.scale.linear(),
             'group': undefined, 
             'svg': d3.svg.axis(),
+            'tickValues': undefined,
             'labels': {
                 'transformer': function(i){ return i }
             }
@@ -398,6 +399,14 @@ var barchart = function(d3){
         return axis.x.labels
     }
 
+    exports.axis.x.tickValues = function(){
+        if (arguments.length > 0){
+            axis.x.tickValues = arguments[0]
+            return exports
+        }
+        return axis.x.tickValues
+    }
+
     exports.axis.x.labels.transformer = function(){ 
         if (arguments.length > 0){
             axis.x.labels.transformer = arguments[0]
@@ -434,13 +443,13 @@ var barchart = function(d3){
         axis.y.scale.domain([data.y.min, data.y.max]) 
 
         axis.x.svg
-            .tickValues(data.data.points.map(function(d){ return d.x }))
+            .tickValues(axis.x.tickValues)
             .tickFormat(axis.x.labels.transformer)
             .scale(axis.x.scale)
 
         axis.y.svg
-        .tickFormat(axis.y.labels.transformer)
-        .scale(axis.y.scale)
+            .tickFormat(axis.y.labels.transformer)
+            .scale(axis.y.scale)
     }
 
     function updateBrush(){
