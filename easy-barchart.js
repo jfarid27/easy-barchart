@@ -43,6 +43,7 @@ var barchart = function(d3){
             'group': undefined, 
             'svg': d3.svg.axis(),
             'tickValues': undefined,
+            'label': undefined,
             'labels': {
                 'transformer': function(i){ return i }
             }
@@ -51,6 +52,7 @@ var barchart = function(d3){
             'scale': d3.scale.linear(),
             'group': undefined,
             'svg': d3.svg.axis(),
+            'label': undefined,
             'labels': {
                 'transformer': function(i){ return i }
             }
@@ -139,6 +141,23 @@ var barchart = function(d3){
                 .attr("transform", "translate(" 
                     + (settings.x.margin 
                         + settings.x['gutter'] ) + ",0)")
+
+            axis.y.group
+                .append('text')
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -(settings.x.gutter + 7))
+                    .attr("x", -settings.y.margin 
+                        - (settings.y.axisWidth*.5))
+                    .style("text-anchor", "center")
+                    .text(axis.y.label)
+
+            axis.x.group
+                .append('text')
+                    .attr("y", settings.y.gutter)
+                    .attr("x", settings.x.margin 
+                        + (settings.x.axisWidth*.5))
+                    .style("text-anchor", "center")
+                    .text(axis.x.label)
 
             var bars = plot.group
                 .selectAll("rect")
@@ -389,6 +408,36 @@ var barchart = function(d3){
             return exports
         }
         return axis.x 
+    }
+
+    exports.axis.y = function(){ 
+        if (arguments.length > 0){
+            axis.y = arguments[0]
+            return exports
+        }
+        return axis.y 
+    }
+
+    exports.axis.x.label = function(){
+    /*Sets or gets axis.x.label for axis formatting
+    */
+
+        if (arguments.length > 0){
+            axis.x.label = arguments[0]
+            return exports
+        }
+        return axis.x.label
+    }
+
+    exports.axis.y.label = function(){
+    /*Sets or gets axis.y.label for axis formatting
+    */
+
+        if (arguments.length > 0){
+            axis.y.label = arguments[0]
+            return exports
+        }
+        return axis.y.label
     }
 
     exports.axis.x.labels = function(){ 

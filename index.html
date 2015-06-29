@@ -30,7 +30,7 @@
                 },
                 'y':{
                     'margin':20,
-                    'gutter':30,
+                    'gutter':70,
                     'axisWidth':600,
                 },
                 'styles':{
@@ -65,6 +65,8 @@
             plot.selection(selection)
                 .settings(settings)
                 .axis.x.labels.transformer(d3.format('-%'))
+                .axis.x.label('foo')
+                .axis.y.label('bar')
 
             plot()
 
