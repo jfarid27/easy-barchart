@@ -142,6 +142,23 @@ var barchart = function(d3){
                     + (settings.x.margin 
                         + settings.x['gutter'] ) + ",0)")
 
+            axis.y.group
+                .append('text')
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -(settings.x.gutter + 7))
+                    .attr("x", -settings.y.margin 
+                        - (settings.y.axisWidth*.5))
+                    .style("text-anchor", "center")
+                    .text(axis.y.label)
+
+            axis.x.group
+                .append('text')
+                    .attr("y", settings.y.gutter)
+                    .attr("x", settings.x.margin 
+                        + (settings.x.axisWidth*.5))
+                    .style("text-anchor", "center")
+                    .text(axis.x.label)
+
             var bars = plot.group
                 .selectAll("rect")
                 .data(reqs.data.points)
