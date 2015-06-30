@@ -153,7 +153,7 @@ var barchart = function(d3){
 
             axis.x.group
                 .append('text')
-                    .attr("y", settings.y.gutter)
+                    .attr("y", settings.y.gutter - 3)
                     .attr("x", settings.x.margin 
                         + (settings.x.axisWidth*.5))
                     .style("text-anchor", "center")
